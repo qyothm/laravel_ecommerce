@@ -2,7 +2,6 @@
 <html>
    <head>
       <!-- Basic -->
-      <base href="/public">
       <meta charset="utf-8" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <!-- Mobile Metas -->
@@ -21,55 +20,71 @@
       <link href="home/css/style.css" rel="stylesheet" />
       <!-- responsive style -->
       <link href="home/css/responsive.css" rel="stylesheet" />
+      <style type="text/css">
+        .center
+        {
+            margin: auto;
+            width: 70%;
+            text-align: center;
+            padding: 30px;
+        }
+
+        table,th,td
+        {
+            border: 1px solid grey;
+        }
+
+        .th_deg
+        {
+            font-size: 30px;
+            padding: 5px;
+            background: skyblue;
+        }
+
+        .img_deg
+        {
+            height: 200px;
+            widows: 200px;
+        }
+
+        .total_deg
+        {
+            font-size: 20px;
+            padding: 40px;
+        }
+      </style>
    </head>
    <body>
       <div class="hero_area">
          <!-- header section starts -->
          @include('home.header')
          <!-- end header section -->
-      <div class="col-sm-6 col-md-4 col-lg-4" style="margin: auto; width: 50%; padding: 30px;">
-        <div class="box">
-           <div class="img-box" style="padding: 20px;">
-              <img src="product/{{ $product->image }}" alt="">
-           </div>
-           <div class="detail-box">
-              <h5>
-                 {{ $product->title }}
-              </h5>
-              @if ($product->discount_price)
-              <h6 style="color: red;">
-                Discount Price
-                ${{ $product->discount_price }}
-             </h6>
-             <h6 style="text-decoration: line-through; color:blue;">
-                Price
-                ${{ $product->price }}
-             </h6>
-             @else
-              <h6 style="color: blue;">
-                Price
-                 ${{ $product->price }}
-              </h6>
-              @endif
-              <h6>Product Category : {{ $product->category }}</h6>
-              <h6>Product Details :{{ $product->description }}</h6>
-              <h6>Available Quantity :{{ $product->quantity }}</h6>
-              <form action="{{ url('add_cart',$product->id) }}" method="POST">
-                @csrf
-                <div class="row">
-                    <div class="col-md-4">
-                        <input type="number" name="quantity" value="1" min="1" style="width: 100px;">
-                    </div>
-                    <div class="col-md-4">
-                        <input type="submit" value="Add to Cart">
-                    </div>
-                </div>
-             </form>
-           </div>
+      <div class="center">
+        <table>
+            <tr>
+                <th class="th_deg">Product Title</th>
+                <th class="th_deg">Product Quantity</th>
+                <th class="th_deg">Price</th>
+                <th class="th_deg">Image</th>
+                <th class="th_deg">Action</th>
+            </tr>
+            <?php $totalprice = 0; ?>
+            @foreach ($cart as $cart)
+            <tr>
+                <td>{{ $cart->product_title }}</td>
+                <td>{{ $cart->quantity }}</td>
+                <td>${{ $cart->price }}</td>
+                <td><img class="img_deg" src="/product/{{ $cart->image }}"></td>
+                <td><a class="btn btn-danger" onclick="return confirm('Are You Sure to Remove this Product?')" href="{{ url('remove_cart',$cart->id) }}">Remove Product</a></td>
+            </tr>
+            <?php $totalprice = $totalprice + $cart->price; ?>
+            @endforeach
+        </table>
+        <div>
+            <h1 class="total_deg">Total Price : ${{ $totalprice }} </h1>
         </div>
-     </div>
+      </div>
     </div>
-
       <!-- footer start -->
      @include('home.footer')
       <!-- footer end -->
