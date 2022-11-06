@@ -262,4 +262,25 @@ class HomeController extends Controller
             return redirect('login');
         }
     }
+
+    public function product_search(Request $request)
+    {
+        $comment = Comment::orderBy('id','desc')->get();
+        $reply = Reply::all();
+        $search_text = $request->search;
+        $product = Product::where('title','LIKE','%'.$search_text.'%')
+                    ->orWhere('category','LIKE','%'.$search_text.'%')
+                    ->paginate(10);
+
+        return view('home.userpage',compact('product','comment','reply'));
+    }
+
+    public function products()
+    {
+        $product = Product::paginate(9);
+        $comment = Comment::orderBy('id','desc')->get();
+        $reply = Reply::all();
+
+        return view('home.all_product', compact('product','comment','reply'));
+    }
 }
