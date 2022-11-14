@@ -89,3 +89,5 @@
        </div>
     </div>
  </section>
+<!--Extra closing div for slider section -->
+</div>
